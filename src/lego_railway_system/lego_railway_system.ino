@@ -7,6 +7,62 @@ PowerFunctions pf(5, 0);
 int tick = 25;
 int predkosc = 0;
 
+class Junction{
+  private:
+    int pin;
+    int pos1;
+    int pos2;
+    Servo servo;
+    bool lights = false;
+    int light_pin_1 = -1;
+    int light_pin_2 = -1;
+  public:
+    bool state = false;
+
+    void start(int pin, int p1, int p2, int lp1 = -1, int lp2 = -1){
+      servo.attach(pin);
+      pos1 = p1;
+      pos2 = p2;
+      if(lp1 != -1){
+        light_pin_1 = lp1;
+        pinMode(light_pin_1, OUTPUT);
+        digitalWrite(light_pin_1, HIGH);
+      }
+      if(lp2 != -1){
+        light_pin_2 = lp2;
+        pinMode(light_pin_2, OUTPUT);
+        digitalWrite(light_pin_2, HIGH);
+      }
+      
+      servo.write(pos1);
+      delay(500);
+      servo.write(pos2);
+      delay(500);
+      servo.write(pos1);
+      if(light_pin_1 != -1)
+       digitalWrite(light_pin_1, LOW);
+    }
+
+    void change(){
+      if(state){
+        servo.write(pos1);
+        if(light_pin_1 != -1)
+          digitalWrite(light_pin_1, LOW);
+        if(light_pin_2 != -1)
+          digitalWrite(light_pin_2, HIGH);
+        state = false;
+      }
+      else{
+        servo.write(pos2);
+        if(light_pin_1 != -1)
+          digitalWrite(light_pin_1, HIGH);
+        if(light_pin_2 != -1)
+          digitalWrite(light_pin_2, LOW);
+        state = true;
+      }
+    }
+};
+
 class CrossingLight{
   private:
     int pin1;
@@ -74,14 +130,16 @@ class Barrier {
     int waiting = false;
     int closing = false;
     int triggered = false;
+    Junction junction;
     
-    void start(int servo_pin, int p_c, int p_o, int s_d, int d = 0){
+    void start(int servo_pin, int p_c, int p_o, int s_d, Junction &j, int d = 0){
       servo.attach(servo_pin);
       pos_close = p_c;
       pos_open = p_o;
       step_distance = s_d;
       first_move_delay = d;
       first_move_delay_temp = first_move_delay;
+      junction = j;
 
       servo.write(pos_open);
       pos_actual = pos_open;    
@@ -115,8 +173,9 @@ class Barrier {
         if(first_move_delay_temp!= first_move_delay) first_move_delay_temp = first_move_delay; //dodatkowo przywraca czas opoznienia rozpoczecia zamykania
         if(waiting_time>0) waiting_time--;
         else{
+          junction.change();
           waiting = false;
-          opening = true;p
+          opening = true;
         }
       }
       //Jesli ustawiono otwieranie to otwieraj szlaban o 1 krok do czasu az osiagnie pozycje otwarcia.
@@ -251,6 +310,7 @@ LiquidCrystal_I2C lcd(0x27,2,1,0,4,5,6,7);
 DisplayData ekran;
 
 SemaforController semafor;
+Junction junction;
 
 void setup() {
   //Serial.begin (9600);
@@ -262,8 +322,10 @@ void setup() {
   lcd.print("Uruchamianie...");
   
   czujnik.start(11, 12);
+
+  junction.start(2, 100, 70, 0, 1);
   
-  szlaban1.start(10, 70, 3, 2, 6); //pin | open pos | close pos | move per 50ms | delay (default 0)
+  szlaban1.start(10, 70, 3, 2, junction, 6); //pin | open pos | close pos | move per 50ms | delay (default 0)
   
   swiatlo1.start(9, 8, 12); //pin | ticks delay betwwen change (~500ms)
 
