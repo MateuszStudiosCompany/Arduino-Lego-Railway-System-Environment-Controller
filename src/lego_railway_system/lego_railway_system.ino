@@ -116,7 +116,7 @@ class Barrier {
         if(waiting_time>0) waiting_time--;
         else{
           waiting = false;
-          opening = true;
+          opening = true;p
         }
       }
       //Jesli ustawiono otwieranie to otwieraj szlaban o 1 krok do czasu az osiagnie pozycje otwarcia.
@@ -265,7 +265,7 @@ void setup() {
   
   szlaban1.start(10, 70, 3, 2, 6); //pin | open pos | close pos | move per 50ms | delay (default 0)
   
-  swiatlo1.start(33, 35, 12); //pin | ticks delay betwwen change (~500ms)
+  swiatlo1.start(9, 8, 12); //pin | ticks delay betwwen change (~500ms)
 
   semafor.start(3, 4);
   
@@ -278,8 +278,8 @@ int timeeee;
 void loop() { //<- pelta wykonywana przez caly czas dzialania Arduino.
   
   delay(20);
-  //int distance = czujnik.getDistance();
-  int distance = 9;
+  int distance = czujnik.getDistance();
+  //int distance = 9;
   if(distance<10){
     szlaban1.Triggered(50);
     swiatlo1.Triggered(50);
