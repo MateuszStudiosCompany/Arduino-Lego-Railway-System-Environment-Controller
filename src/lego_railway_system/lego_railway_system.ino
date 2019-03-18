@@ -1,8 +1,31 @@
+/*
+ * 0  led zwrotnicy
+ * 1  led zwrotnicy
+ * 2  serwo zwrotnicy kontrola
+ * 3  semafor led
+ * 4  semafor led 2
+ * 5  irda sterujaca
+ * 6  serwo przejazd_2
+ * 7  led przejazd_2
+ * -
+ * 8  led przejazd
+ * 9  led przejazd
+ * 10 serwo przejazdu
+ * 11 trigger
+ * 12 echo
+ * 13 led_przejazd_2
+ * GND
+ * AREF
+ * SDA  ekran
+ * SCL  ekran
+ * -----
+ * 3.3V wszystko
+ * 5V   sensor
+ */
 #include <LCD.h>
 #include <LiquidCrystal_I2C.h>
 #include <Servo.h>
 #include <PowerFunctions.h>
-
 PowerFunctions pf(5, 0);
 int tick = 25;
 int predkosc = 0;
@@ -148,13 +171,26 @@ class Barrier {
     void Triggered(int t){
       waiting_time = t;
       triggered = true;
+      Serial.println("XDDD");
       }
     void TakeAction(){
+      Serial.print("B|TA|");
+      Serial.print(waiting);
+      Serial.print("|");
+      Serial.print(waiting_time);
+      Serial.print("|");
+      Serial.print(triggered);
+      Serial.print("|");
+      Serial.print(closing);
+      Serial.print("|");
+      Serial.print(opening);
+      Serial.println("|");
       //jeśli nie jest zamknięty (w pełni) to ustaw zamykanie (jeśli otwierał to przerwij)
       if((!waiting) && (triggered)){
         closing = true;
         opening = false;
-        triggered = false;
+        //triggered = false;
+        Serial.println("Szlaban rozpoczyna zamykanie");
       }
       //Jesli ustawiono zamykanie to zamykaj szlaban o 1 krok do czasu az osiagnie pozycje zamkniecia.
       if(closing){
@@ -173,9 +209,11 @@ class Barrier {
         if(first_move_delay_temp!= first_move_delay) first_move_delay_temp = first_move_delay; //dodatkowo przywraca czas opoznienia rozpoczecia zamykania
         if(waiting_time>0) waiting_time--;
         else{
+          Serial.println("Bum szaka laka zamieniam z wait na otwieranie!");
           junction.change();
           waiting = false;
           opening = true;
+          //triggered = false;
         }
       }
       //Jesli ustawiono otwieranie to otwieraj szlaban o 1 krok do czasu az osiagnie pozycje otwarcia.
@@ -186,6 +224,7 @@ class Barrier {
           opening = false;
         }
       }
+      triggered = false;
       servo.write(pos_actual);
     }
 };
@@ -313,7 +352,7 @@ SemaforController semafor;
 Junction junction;
 
 void setup() {
-  //Serial.begin (9600);
+  Serial.begin (115200);
   
   lcd.begin (16,2); // for 16 x 2 LCD module
   lcd.setBacklightPin(3,POSITIVE);
@@ -342,13 +381,15 @@ void loop() { //<- pelta wykonywana przez caly czas dzialania Arduino.
   delay(20);
   int distance = czujnik.getDistance();
   //int distance = 9;
-  if(distance<10){
+  //0 protect from random intenferences. I hate u hc-sr04
+  if((distance<10) && (distance!=0)){
     szlaban1.Triggered(50);
     swiatlo1.Triggered(50);
     pomiar.addTick();
   }
   else if(pomiar.after_test) predkosc = pomiar.finish();
-  
+  Serial.println(distance);
+
   szlaban1.TakeAction();
   swiatlo1.TakeAction();
   semafor.TakeAction();
