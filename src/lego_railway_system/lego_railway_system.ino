@@ -171,26 +171,26 @@ class Barrier {
     void Triggered(int t){
       waiting_time = t;
       triggered = true;
-      Serial.println("XDDD");
+      //Serial.println("XDDD");
       }
     void TakeAction(){
-      Serial.print("B|TA|");
-      Serial.print(waiting);
-      Serial.print("|");
-      Serial.print(waiting_time);
-      Serial.print("|");
-      Serial.print(triggered);
-      Serial.print("|");
-      Serial.print(closing);
-      Serial.print("|");
-      Serial.print(opening);
-      Serial.println("|");
+      //Serial.print("B|TA|");
+      //Serial.print(waiting);
+      //Serial.print("|");
+      //Serial.print(waiting_time);
+      //Serial.print("|");
+      //Serial.print(triggered);
+      //Serial.print("|");
+      //Serial.print(closing);
+      //Serial.print("|");
+      //Serial.print(opening);
+      //Serial.println("|");
       //jeśli nie jest zamknięty (w pełni) to ustaw zamykanie (jeśli otwierał to przerwij)
       if((!waiting) && (triggered)){
         closing = true;
         opening = false;
         //triggered = false;
-        Serial.println("Szlaban rozpoczyna zamykanie");
+        //Serial.println("Szlaban rozpoczyna zamykanie");
       }
       //Jesli ustawiono zamykanie to zamykaj szlaban o 1 krok do czasu az osiagnie pozycje zamkniecia.
       if(closing){
@@ -209,7 +209,7 @@ class Barrier {
         if(first_move_delay_temp!= first_move_delay) first_move_delay_temp = first_move_delay; //dodatkowo przywraca czas opoznienia rozpoczecia zamykania
         if(waiting_time>0) waiting_time--;
         else{
-          Serial.println("Bum szaka laka zamieniam z wait na otwieranie!");
+          //Serial.println("Bum szaka laka zamieniam z wait na otwieranie!");
           junction.change();
           waiting = false;
           opening = true;
@@ -352,7 +352,7 @@ SemaforController semafor;
 Junction junction;
 
 void setup() {
-  Serial.begin (115200);
+  //Serial.begin (115200);
   
   lcd.begin (16,2); // for 16 x 2 LCD module
   lcd.setBacklightPin(3,POSITIVE);
@@ -388,7 +388,7 @@ void loop() { //<- pelta wykonywana przez caly czas dzialania Arduino.
     pomiar.addTick();
   }
   else if(pomiar.after_test) predkosc = pomiar.finish();
-  Serial.println(distance);
+  //Serial.println(distance);
 
   szlaban1.TakeAction();
   swiatlo1.TakeAction();
