@@ -24,16 +24,17 @@ class CrossingLight{
             mode = n_mode;
 			tick_timer = change_after_ticks;
 
-			if(startup_test_time > 0){
-				digitalWrite(pin1, HIGH);
-				if(pin2 > 0){
-					digitalWrite(pin2, HIGH);
-				}
-				delay(startup_test_time);
-				digitalWrite(pin1, LOW);
-				if(pin2 > 0){
-					digitalWrite(pin2, LOW);
-				}
+			if(startup_test_time < 0){
+				return true;
+			}
+			digitalWrite(pin1, HIGH);
+			if(pin2 > 0){
+				digitalWrite(pin2, HIGH);
+			}
+			delay(startup_test_time);
+			digitalWrite(pin1, LOW);
+			if(pin2 > 0){
+				digitalWrite(pin2, LOW);
 			}
 			
 			return true;
