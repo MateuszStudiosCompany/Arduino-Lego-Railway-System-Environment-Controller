@@ -1,41 +1,53 @@
 #include <Arduino.h>
 #include "CrossingController.h"
+#include "Config.h"
 
-RailwayCrossingController crossing;
-
-int i = 0;
-int toggle = true;
-
+#ifdef CFG_DEMO_MODE
+    RailwayCrossingController crossing;
+    int i = 0;
+    int toggle = true;
+#else
+    #define CFG_DEMO_MODE false;
+#endif
 
 void setup(){
-    Serial.begin(115200);
-    pinMode(2, INPUT_PULLUP);
-    crossing.addLight(5, 4, 0, 6);
-    //crossing.addLight(5, 4, 1, 6, 0);
-    //crossing.addLight(5, 4, 0, 6, 0);
-    crossing.addBarrier(2, 70, 3);
-    // crossing.addBarrier(11, 3, 70);
-    crossing.setDebugMode();
+    if(CFG_DEBUG_MODE){
+        Serial.begin(115200);
+        crossing.setDebugMode();
+    }
+    if(CFG_DEMO_MODE){
+        crossing.addLight(5, 4, 0, 6);
+        //crossing.addLight(5, 4, 1, 6, 0);
+        //crossing.addLight(5, 4, 0, 6, 0);
+        crossing.addBarrier(2, 70, 3);
+        // crossing.addBarrier(11, 3, 70);
+    }
+    //Note: You can delete setup code above if you don't want to use demo
+    //=============[ Put Your Setup Here ]=============
+
+
+
+
+    //=================================================
 }
 
 void loop(){
-    
-    if(i == 30){
-        // Serial.print("i = ");
-        // Serial.print(i);
-        // Serial.print(" | ");
-        // Serial.print("crossing.toggle(");
-        // Serial.print(toggle);
-        // Serial.println(")");
-        //crossing.toggle(toggle);
-        //crossing.toggle(toggle, 20);
-        //crossing.toggle(true, 20);
-        crossing.toggle(toggle);
-        toggle = !toggle;
-        i = 0;
+    if(CFG_DEMO_MODE){
+        if(i == 30){
+            //crossing.toggle(true, 20);
+            crossing.toggle(toggle);
+            toggle = !toggle;
+            i = 0;
+        }
+        ++i;
+        crossing.takeAction();
+        delay(60);
     }
-    ++i;
-    crossing.takeAction();
-    delay(60);
-    
+    //Note: You can delete loop code above if you don't want to use demo
+    //=============[ Put Your Loop Here ]==============
+
+
+
+
+    //=================================================
 }
