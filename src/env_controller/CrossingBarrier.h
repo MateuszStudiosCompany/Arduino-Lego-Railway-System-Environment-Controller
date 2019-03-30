@@ -41,7 +41,7 @@ class CrossingBarrier{
 			delay(startup_test_time/2);
 		}
 
-        void debug(bool toggle = true){
+        void setDebugMode(bool toggle = true){
             debug = toggle;
         }
 

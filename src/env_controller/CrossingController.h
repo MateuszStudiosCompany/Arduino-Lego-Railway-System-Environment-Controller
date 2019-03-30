@@ -34,21 +34,21 @@ class RailwayCrossingController{
 				crossing_lights[crossing_lights_registered-1].toggle(toggle);
 			}
 			for(i = 0; i < barriers_registered; i++){
-				crossing_barriers[barriers_registered - 1].toggle(toggle, 1);
+				crossing_barriers[barriers_registered - 1].toggle(toggle, 5);
 			}
 			return true;
 		}
 
-		void debug(bool toggle = true){
+		void setDebugMode(bool toggle = true){
             debug = toggle;
 			if(crossing_lights_registered > 0){
 				for(i = 0; i < crossing_lights_registered; i++){
-					crossing_lights[crossing_lights_registered-1].debug(toggle);
+					crossing_lights[crossing_lights_registered-1].setDebugMode(toggle);
 				}
 			}
 			if(barriers_registered > 0){
 				for(i = 0; i < barriers_registered; i++){
-					crossing_barriers[barriers_registered-1].debug(toggle);
+					crossing_barriers[barriers_registered-1].setDebugMode(toggle);
 				}
 			}
         }
@@ -57,7 +57,7 @@ class RailwayCrossingController{
 			crossing_lights[crossing_lights_registered].init(pin_1, pin_2, mode, change_after_ticks);
 			if(debug){
 				Serial.println(debug_prefix + "Light added to controller!");
-				crossing_lights[crossing_lights_registered].debug(true);
+				crossing_lights[crossing_lights_registered].setDebugMode(true);
 			}
 			crossing_lights_registered++;
 		}
@@ -65,7 +65,7 @@ class RailwayCrossingController{
 			crossing_barriers[barriers_registered].init(servo_pin, n_pos_closed, n_pos_open, startup_test_time);
 			if(debug){
 				Serial.println(debug_prefix + "Barrier added to controller!");
-				crossing_barriers[barriers_registered].debug(true);
+				crossing_barriers[barriers_registered].setDebugMode(true);
 			}
 			barriers_registered++;
 		}

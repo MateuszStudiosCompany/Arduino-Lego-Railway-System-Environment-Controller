@@ -15,11 +15,12 @@ void setup(){
     //crossing.addLight(5, 4, 0, 6, 0);
     crossing.addBarrier(2, 70, 3);
     // crossing.addBarrier(11, 3, 70);
+    crossing.setDebugMode();
 }
 
 void loop(){
     
-    if(i == 10){
+    if(i == 30){
         // Serial.print("i = ");
         // Serial.print(i);
         // Serial.print(" | ");
@@ -28,7 +29,8 @@ void loop(){
         // Serial.println(")");
         //crossing.toggle(toggle);
         //crossing.toggle(toggle, 20);
-        crossing.toggle(true, 20);
+        //crossing.toggle(true, 20);
+        crossing.toggle(toggle);
         toggle = !toggle;
         i = 0;
     }

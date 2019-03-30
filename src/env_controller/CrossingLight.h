@@ -54,7 +54,7 @@ class CrossingLight{
 			return true;
 		}
 
-		void debug(bool toggle = true){
+		void setDebugMode(bool toggle = true){
             debug = toggle;
         }
 
