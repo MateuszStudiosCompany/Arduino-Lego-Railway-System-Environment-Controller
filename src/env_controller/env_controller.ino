@@ -1,9 +1,11 @@
 #include <Arduino.h>
 #include "CrossingController.h"
+#include "NetworkCommunication.h"
 #include "Config.h"
 
 #ifdef CFG_DEMO_MODE
     RailwayCrossingController crossing;
+    NetworkCommunication network;
     int i = 0;
     int toggle = true;
 #else
@@ -13,7 +15,10 @@
 void setup(){
     if(CFG_DEBUG_MODE){
         Serial.begin(115200);
+        network.init(CFG_WIFI_SSID, CFG_WIFI_PASS, CFG_WIFI_USE_HTTPS, "10.0.0.201", 81);
+
         crossing.setDebugMode();
+        //network.setDebugMode();
     }
     if(CFG_DEMO_MODE){
         crossing.addLight(5, 4, 0, 6);
