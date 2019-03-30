@@ -9,6 +9,8 @@ class CrossingLight{
 		int tick_timer = 0;
 		bool enable = false;
 		bool status = false;
+
+		bool debug = false;
 	public:
 		bool init(int n_pin1, int n_pin2 = -1, int n_mode = 0, int n_change_after_ticks = 12, int startup_test_time = 1000){
 			if(n_pin1 < 0 || change_after_ticks < 0){
@@ -51,6 +53,10 @@ class CrossingLight{
 			}
 			return true;
 		}
+
+		void debug(bool toggle = true){
+            debug = toggle;
+        }
 
 		void takeAction(){
 			if(!enable){

@@ -1,9 +1,6 @@
 #include <Arduino.h>
 #include <Servo.h>
 
-#define CROSSING_MODE_ON_AND_OFF 1
-#define CROSSING_MODE_ON_AND_TIME 2
-
 #define OPEN 1
 #define OPENING 2
 #define CLOSE 3
@@ -13,13 +10,10 @@ class CrossingBarrier{
 	private:
 		Servo servo;
 		int pos_closed, pos_open, pos_actual;
-		//TODO: Move tick_timer and time control to main object
-		int tick_timer = 0;
 		int smooth_move = 0;
 		int status = OPEN;
-        int open_mode = CROSSING_MODE_ON_AND_TIME;
 
-		bool debug = true;
+		bool debug = false;
 		String debug_prefix = "[Crossing Barrier] ";
 
 	  public:
@@ -33,7 +27,7 @@ class CrossingBarrier{
 			pos_actual = pos_open;
 
 			if(debug){
-				Serial.println("Barrier initialized!");
+				Serial.println(debug_prefix + "Barrier initialized!");
 			}
 
 			if(startup_test_time < 0){
@@ -47,39 +41,34 @@ class CrossingBarrier{
 			delay(startup_test_time/2);
 		}
 
-		bool toggle(bool toggle, int n_open_mode = CROSSING_MODE_ON_AND_TIME, int closed_ticks = 30, int n_smooth_move = 0){
-			if (open_mode < 0 || closed_ticks < 0){
-				return false;
-			}
-            open_mode = n_open_mode;
+        void debug(bool toggle = true){
+            debug = toggle;
+        }
+
+		bool toggle(bool toggle, int n_smooth_move = 0){
 			smooth_move = n_smooth_move;
 			
 			if(!toggle){
-				if(debug){
-					Serial.println("Barrier opening caused by program!");
-				}
 				if(status == OPEN || status == OPENING){
 					return true;
 				}
-				tick_timer = 0;
 				status = OPENING;
+                if(debug){
+					Serial.println(debug_prefix + "Barrier starts to open.");
+				}
 				return true;
 			}
 
-			if(debug){
-				Serial.println("Barrier closing caused by program!");
-			}
-			if(status == CLOSE){
-				tick_timer = closed_ticks;
-			}
-			else if(status != CLOSING){
-				tick_timer = closed_ticks;
-				status = CLOSING;
+			if(status != CLOSING){
+                status = CLOSING;
+				if(debug){
+                    Serial.println(debug_prefix + "Barrier starts to close.");
+                }
 			}
 			return true;
-			
 		}
 
+        //TODO: Remake closing and opening to one function
 		bool actionClosing(){
 			if(smooth_move <= 0){
 				pos_actual = pos_closed;
@@ -127,20 +116,10 @@ class CrossingBarrier{
 		}
 
 		bool actionClose(){
-			if (tick_timer <= 0 && open_mode != CROSSING_MODE_ON_AND_OFF){
-				status = OPENING;
-				return true;
-			}else if(open_mode != CROSSING_MODE_ON_AND_OFF){
-                tick_timer--;
-            }
-			
+			//do nothing while ticker was moved to CrossingController. But I'm not that cruel to delete this ;)
 		}
 
 		bool takeAction(){
-			// Serial.print("STATUS: ");
-			// Serial.print(status);
-			// Serial.print(" | TICK: ");
-			// Serial.println(tick_timer);
 			switch (status)
 			{
 				case OPEN:

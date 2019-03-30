@@ -19,7 +19,7 @@ void setup(){
 
 void loop(){
     
-    if(i == 100){
+    if(i == 10){
         // Serial.print("i = ");
         // Serial.print(i);
         // Serial.print(" | ");
@@ -28,7 +28,7 @@ void loop(){
         // Serial.println(")");
         //crossing.toggle(toggle);
         //crossing.toggle(toggle, 20);
-        crossing.toggle(true, 30);
+        crossing.toggle(true, 20);
         toggle = !toggle;
         i = 0;
     }
