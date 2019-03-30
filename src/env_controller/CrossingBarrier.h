@@ -1,8 +1,8 @@
 #include <Arduino.h>
 #include <Servo.h>
 
-#define CROSSING_BARRIER_MDOE_TIME 1
-#define CROSSING_BARRIER_MDOE_TRIGGER 2
+#define CROSSING_MODE_ON_AND_OFF 1
+#define CROSSING_MODE_ON_AND_TIME 2
 
 #define OPEN 1
 #define OPENING 2
@@ -17,6 +17,7 @@ class CrossingBarrier{
 		int tick_timer = 0;
 		int smooth_move = 0;
 		int status = OPEN;
+        int open_mode = CROSSING_MODE_ON_AND_TIME;
 
 		bool debug = true;
 		String debug_prefix = "[Crossing Barrier] ";
@@ -46,10 +47,11 @@ class CrossingBarrier{
 			delay(startup_test_time/2);
 		}
 
-		bool toggle(bool toggle, int open_mode = 1, int closed_ticks = 30, int n_smooth_move = 0){
+		bool toggle(bool toggle, int n_open_mode = CROSSING_MODE_ON_AND_TIME, int closed_ticks = 30, int n_smooth_move = 0){
 			if (open_mode < 0 || closed_ticks < 0){
 				return false;
 			}
+            open_mode = n_open_mode;
 			smooth_move = n_smooth_move;
 			
 			if(!toggle){
@@ -125,22 +127,24 @@ class CrossingBarrier{
 		}
 
 		bool actionClose(){
-			if (tick_timer <= 0){
+			if (tick_timer <= 0 && open_mode != CROSSING_MODE_ON_AND_OFF){
 				status = OPENING;
 				return true;
-			}
-			tick_timer--;
+			}else if(open_mode != CROSSING_MODE_ON_AND_OFF){
+                tick_timer--;
+            }
+			
 		}
 
 		bool takeAction(){
-			Serial.print("STATUS: ");
-			Serial.print(status);
-			Serial.print(" | TICK: ");
-			Serial.println(tick_timer);
+			// Serial.print("STATUS: ");
+			// Serial.print(status);
+			// Serial.print(" | TICK: ");
+			// Serial.println(tick_timer);
 			switch (status)
 			{
 				case OPEN:
-					return;
+					return true;
 				case OPENING:
 					actionOpening();
 					break;

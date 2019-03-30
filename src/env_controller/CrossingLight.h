@@ -43,11 +43,16 @@ class CrossingLight{
 		
 		bool toggle(bool toggle){
 			enable = toggle;
+			if(!enable){
+				digitalWrite(pin1, LOW);
+				if(pin2 > 0){
+				digitalWrite(pin2, LOW);
+			}
+			}
 			return true;
 		}
 
 		void takeAction(){
-            Serial.println("hello2");
 			if(!enable){
 				return;
 			}
@@ -70,7 +75,6 @@ class CrossingLight{
 		}
 
 		void modeLeftRight(){
-            Serial.println("hello3");
 			digitalWrite(pin1, status);
 			if(pin2 > 0){
 				digitalWrite(pin2, !status);

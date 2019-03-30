@@ -2,9 +2,6 @@
 #include "CrossingLight.h"
 #include "CrossingBarrier.h"
 
-#define CROSSING_MODE_ON_AND_OFF 1
-#define CROSSING_MODE_ON_AND_TIME 2
-
 class RailwayCrossingController{
 	private:
 		int i = 0;
@@ -22,16 +19,15 @@ class RailwayCrossingController{
 	public:
 		bool toggle(bool toggle, int ticks = 0){
 			
-			// if(ticks <= 0){
-			// 	tick_timer = ticks;
-			// 	mode = CROSSING_MODE_ON_AND_TIME;
-			// }else{
-			// 	mode = CROSSING_MODE_ON_AND_OFF;
-			// }
+			if(ticks <= 0){
+				mode = CROSSING_MODE_ON_AND_OFF;
+			}else{
+				tick_timer = ticks;
+				mode = CROSSING_MODE_ON_AND_TIME;
+			}
 			
 			enable = toggle;
 			for(i = 0; i < crossing_lights_registered; i++){
-				//TODO: Make toggle for specific time
 				crossing_lights[crossing_lights_registered-1].toggle(toggle);
 			}
 			for(i = 0; i < barriers_registered; i++){
@@ -57,10 +53,15 @@ class RailwayCrossingController{
 		}
 
 		void takeAction(){
-			// if(!enable){
-			// 	return;
-			// }
-			if(crossing_lights_registered > 0){
+			Serial.println(tick_timer);
+			if(mode = CROSSING_MODE_ON_AND_TIME && tick_timer == 0){
+				this->toggle(false);
+				tick_timer = -1;
+			}else if(mode = CROSSING_MODE_ON_AND_TIME && tick_timer > 0){
+				tick_timer--;
+			}
+
+			if(crossing_lights_registered > 0 && enable){
 				for(i = 0; i < crossing_lights_registered; i++){
 					crossing_lights[crossing_lights_registered - 1].takeAction();
 				}
