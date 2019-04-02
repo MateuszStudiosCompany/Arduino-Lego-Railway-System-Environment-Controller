@@ -12,6 +12,8 @@ class CrossingLight{
 
 		bool debug = false;
 	public:
+		CrossingLight *next_in_list = NULL;
+
 		bool init(int n_pin1, int n_pin2 = -1, int n_mode = 0, int n_change_after_ticks = 12, int startup_test_time = 1000){
 			if(n_pin1 < 0 || change_after_ticks < 0){
 				return false;

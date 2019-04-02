@@ -17,6 +17,8 @@ class CrossingBarrier{
 		String debug_prefix = "[Crossing Barrier] ";
 
 	  public:
+		CrossingBarrier *next_in_list = NULL;
+
 		bool init(int servo_pin, int n_pos_closed, int n_pos_open, int startup_test_time = 1000){
 			if(servo_pin < 0 || pos_closed < 0 || pos_open < 0){
 				return false;
