@@ -17,7 +17,7 @@ class List{
             ListTest *new_obj = new ListTest;
             new_obj->a = a;
 
-            if(first == NULL){
+            if(!first){
                 first = new_obj;
                 return;
             }
@@ -30,11 +30,21 @@ class List{
 
         void view(){
             ListTest *pointer = first;
-            cout << pointer->a << endl;
-            while(pointer->next){
-                pointer = pointer->next;
+            //cout << pointer->a << endl;
+            // while(pointer->next){
+            //     cout << pointer->a << endl;
+            //     pointer = pointer->next;
+            // }
+            bool xd = false;
+            do{
                 cout << pointer->a << endl;
-            }
+                if(!xd){
+                    xd = true;
+                    continue;
+                }
+                pointer = pointer->next;
+            }while(pointer->next);
+
             cout << "end\n";
         }
 };

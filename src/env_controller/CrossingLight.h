@@ -1,4 +1,5 @@
-#include <Arduino.h>
+#ifndef LIB_CROSSING_LIGHT
+#define LIB_CROSSING_LIGHT
 
 class CrossingLight{
 	private:
@@ -102,3 +103,5 @@ class CrossingLight{
         }
 
 };
+
+#endif

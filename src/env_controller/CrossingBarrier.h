@@ -1,4 +1,6 @@
-#include <Arduino.h>
+#ifndef LIB_CROSSING_BARRIER
+#define LIB_CROSSING_BARRIER
+
 #include <Servo.h>
 
 #define CR_BR_OPEN 1
@@ -29,7 +31,6 @@ class CrossingBarrier{
 			pos_actual = pos_open;
 
 			if(debug){
-				Serial.println(debug_prefix + "Barrier initialized!");
 			}
 
 			if(startup_test_time < 0){
@@ -139,3 +140,5 @@ class CrossingBarrier{
 
 		}
 };
+
+#endif
