@@ -50,17 +50,18 @@ class Tasker{
 					Serial.println("Crossing toggle to " + (String) toggle + ".");
 				#endif
 			}else if(command_name == "setJunction"){
+				//FIX: Pins are inversed thaths why i reverse given state
 				bool state = command["is_straight"];
-				junction.turn(state);
+				junction.turn(!state);
 				#ifdef DEBUG
-					if(state) Serial.println("Junction change direction to toggle to straight");
+					if(!state) Serial.println("Junction change direction to toggle to straight");
 					else Serial.println("Junction change direction to toggle to side");
 				#endif
 			}else if(command_name == "setSemaphore"){
 				bool state = command["is_green"];
-				semaphore.toggle(state);
+				semaphore.toggle(!state);
 				#ifdef DEBUG
-					if(state) Serial.println("Semafor changed to green");
+					if(!state) Serial.println("Semafor changed to green");
 					else Serial.println("Semafor changed to red");
 				#endif
 			}
