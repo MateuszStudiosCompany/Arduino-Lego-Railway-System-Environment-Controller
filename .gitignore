@@ -1,1 +1,5 @@
 desktop.ini
+.vscode/
+List.cpp
+testlist.exe
+build/
