@@ -1,4 +1,6 @@
-#include <Arduino.h>
+#ifndef LIB_CROSSING_BARRIER
+#define LIB_CROSSING_BARRIER
+
 #include <Servo.h>
 
 #define CR_BR_OPEN 1
@@ -17,6 +19,8 @@ class CrossingBarrier{
 		String debug_prefix = "[Crossing Barrier] ";
 
 	  public:
+		CrossingBarrier *next_in_list = NULL;
+
 		bool init(int servo_pin, int n_pos_closed, int n_pos_open, int startup_test_time = 1000){
 			if(servo_pin < 0 || pos_closed < 0 || pos_open < 0){
 				return false;
@@ -27,7 +31,6 @@ class CrossingBarrier{
 			pos_actual = pos_open;
 
 			if(debug){
-				Serial.println(debug_prefix + "Barrier initialized!");
 			}
 
 			if(startup_test_time < 0){
@@ -137,3 +140,5 @@ class CrossingBarrier{
 
 		}
 };
+
+#endif
