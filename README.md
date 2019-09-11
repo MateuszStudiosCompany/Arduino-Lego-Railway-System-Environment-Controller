@@ -13,7 +13,7 @@
 ## Project-related repos:
 - [Server](https://github.com/MateuszStudiosCompany/Arduino-Lego-Railway-System-Server) - trains traffic control (server includes Web Train Controller).
 - [Web Train Controller](https://github.com/MateuszStudiosCompany/Arduino-Lego-Railway-System-Web-Train-Controller) - website for changing train lighting, horn or blink lights.
-- [Train Controller](https://github.com/MateuszStudiosCompany/Arduino-Lego-Railway-System-Train-Controller) - all you need for trains **(you are here)**.
-- [Environment Controller](https://github.com/MateuszStudiosCompany/Arduino-Lego-Railway-System-Environment-Controller) - railway crossings, semaphores, etc.
+- [Train Controller](https://github.com/MateuszStudiosCompany/Arduino-Lego-Railway-System-Train-Controller) - all you need for trains.
+- [Environment Controller](https://github.com/MateuszStudiosCompany/Arduino-Lego-Railway-System-Environment-Controller) - railway crossings, semaphores, etc **(you are here)**.
 
 *Note: this old version is not fully automatic for more than one train ([Train32](https://gitlab.com/FlyingArmageddon/train32) will be)!*
